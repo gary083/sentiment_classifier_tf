@@ -22,6 +22,8 @@ def parse():
 	parser.add_argument('-load_model' , default=False, help='load_model...')
 	parser.add_argument('-model_dir' , default='save', help='model_dir...')
 	parser.add_argument('-dict_file' , default='dictionary.txt', help='dict_file...')
+	parser.add_argument('-data_dir' , default='', help='data_dir...')
+	parser.add_argument('-data_file' , default='feature_twitter.txt', help='data_file...')
 	args = parser.parse_args()
 	return args
 

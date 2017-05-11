@@ -7,9 +7,14 @@ import numpy as np
 class sentiment_classifier(object):
 	def __init__(self, sess, args ):
 		self.model_dir = args.model_dir
+		try: 
+			print ('creating the dicectory %s...' %(self.model_dir))
+			os.mkdir(self.model_dir)
+		except:
+			print ('%s has created...' %(self.model_dir))
 		self.model_path = self.model_dir + '/sent_cls.ckpt'
-		self.data_dir = ''  #'data/'
-		self.data_file = self.data_dir + 'feature_twitter.txt'
+		self.data_dir = args.data_dir
+		self.data_file = self.data_dir + '/' + args.data_file
 		self.dict_file = args.dict_file
 		self.sess = sess
 		self.training_epochs = 2
@@ -28,8 +33,7 @@ class sentiment_classifier(object):
 		self.pad = self.dictionary['<PAD>']
 		self.build_model()
 		self.saver = tf.train.Saver(tf.all_variables())
-		
-
+	
 	def build_model(self):
 		#placeholder
 		print ('placeholding...')
