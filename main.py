@@ -3,6 +3,7 @@ import os
 import tensorflow as tf 
 import numpy as np
 import model
+import argparse
 
 embedding_dim = 128
 max_length = 30
@@ -10,16 +11,26 @@ unit_size = 128
 batch_size = 1024
 load_model = False
 
-def run(mode):
+def parse():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-train', action='store_true', help='train...')
+	parser.add_argument('-test', action='store_true', help='test...')
+	parser.add_argument('-embedding_dim' , default=128, help='embedding_dim...')
+	parser.add_argument('-max_length' , default=30, help='max_length...')
+	parser.add_argument('-unit_size' , default=128, help='unit_size...')
+	parser.add_argument('-batch_size' , default=1024, help='batch_size...')
+	parser.add_argument('-load_model' , default=False, help='load_model...')
+	args = parser.parse_args()
+	return args
+
+def run(args):
 	sess = tf.Session()
-	classifier =  model.sentiment_classifier(sess, embedding_dim, max_length, unit_size, batch_size, load_model)
-	if mode == 'train':
+	classifier =  model.sentiment_classifier(sess, args)
+	if arg.train:
 		classifier.train()
-	elif mode == 'test':
+	elif arg.test:
 		classifier.test()
 
-
 if __name__ == '__main__':
-	#mode = 'train'
-	mode = 'test'
-	run(mode)
+	arg = parse()
+	run(arg)

@@ -11,7 +11,7 @@ data_dir = ''  #'data/'
 data_file = data_dir + 'feature_twitter.txt'
 '''
 class sentiment_classifier(object):
-	def __init__(self, sess, embedding_dim, max_length, unit_size, batch_size, load_model ):
+	def __init__(self, sess, args ):
 		self.model_dir = 'save/'
 		self.model_path = self.model_dir + 'sent_cls.ckpt'
 		self.data_dir = ''  #'data/'
@@ -22,11 +22,11 @@ class sentiment_classifier(object):
 		self.learning_rate = 0.001
 		self.val_ratio = 0.98
 		self.display_step = 50
-		self.load_model = load_model
-		self.embedding_dim = embedding_dim
-		self.max_length = max_length
-		self.unit_size = unit_size
-		self.batch_size = batch_size
+		self.load_model = args.load_model
+		self.embedding_dim = args.embedding_dim
+		self.max_length = args.max_length
+		self.unit_size = args.unit_size
+		self.batch_size = args.batch_size
 		self.dictionary, self.num_words = self.get_dictionary(self.dict_file)
 		self.build_model()
 		self.saver = tf.train.Saver(tf.all_variables())
@@ -172,7 +172,7 @@ class sentiment_classifier(object):
 		while True:
 			input_sentence = input(">> Input you sentence: ")
 			pat = re.compile('(\W+)')
-			input_sentence = re.split(pat, input_sentence)
+			input_sentence = re.split(pat, input_sentence.lower())
 			print (' '.join(input_sentence))
 			data = self.tokenizer(' '.join(input_sentence))
 			print (data)
