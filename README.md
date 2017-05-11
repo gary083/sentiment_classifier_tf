@@ -2,8 +2,8 @@
 ## How to run it :<br>
 you can get training data and model here : https://goo.gl/dfGIHs<br>
   * train : `$ python3 main.py -train`<br>
+   model save in the directory `save/` by default. <br>
   * test  : `$ python3 main.py -test`<br>
-model save in the directory `save/` by default. <br>
       
 ## environment : <br>
 tensorflow-gpu (1.0.1)<br>
