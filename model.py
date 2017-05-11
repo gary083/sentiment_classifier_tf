@@ -4,19 +4,13 @@ import re
 import tensorflow as tf 
 import numpy as np
 
-'''
-model_path = model_dir + 'sent_cls.ckpt'
-dict_file = 'dictionary.txt'
-data_dir = ''  #'data/'
-data_file = data_dir + 'feature_twitter.txt'
-'''
 class sentiment_classifier(object):
 	def __init__(self, sess, args ):
-		self.model_dir = 'save/'
-		self.model_path = self.model_dir + 'sent_cls.ckpt'
+		self.model_dir = args.model_dir
+		self.model_path = self.model_dir + '/sent_cls.ckpt'
 		self.data_dir = ''  #'data/'
 		self.data_file = self.data_dir + 'feature_twitter.txt'
-		self.dict_file = 'dictionary.txt'
+		self.dict_file = args.dict_file
 		self.sess = sess
 		self.training_epochs = 2
 		self.learning_rate = 0.001
@@ -28,6 +22,10 @@ class sentiment_classifier(object):
 		self.unit_size = args.unit_size
 		self.batch_size = args.batch_size
 		self.dictionary, self.num_words = self.get_dictionary(self.dict_file)
+		self.eos = self.dictionary['<EOS>']
+		self.bos = self.dictionary['<BOS>']
+		self.unk = self.dictionary['<UNK>']
+		self.pad = self.dictionary['<PAD>']
 		self.build_model()
 		self.saver = tf.train.Saver(tf.all_variables())
 		
@@ -99,25 +97,26 @@ class sentiment_classifier(object):
 			raise ValueError('Can not find dictionary file %s' %(dict_file))
 
 	def tokenizer(self, input_sentence):
-		data = [0]*self.max_length
-		word_count = 0
+		data = [self.pad]*self.max_length
+		data[0] = self.bos
+		data[self.max_length-1] = self.eos
+		word_count = 1
 		for word in input_sentence.split():
-			if word_count>=self.max_length:
+			if word_count>=self.max_length-1:
 				break;
 			if word in self.dictionary:
 				data[word_count] = self.dictionary[word]
 			else:
-				data[word_count] = 1
+				data[word_count] = self.unk
 			word_count += 1
 		return data
 
 	def build_dataset(self, data_file):
-		file = data_dir + data_file
-		if os.path.exists(file):
+		if os.path.exists(self.data_file):
 			print ('building dataset...')
 			x_data = []
 			y_data = []
-			with open(file, 'r', errors='ignore') as file:
+			with open(data_file, 'r', errors='ignore') as file:
 				un_parse = file.readlines()
 				for line in un_parse:
 					line = line.strip('\n').split(' +++$+++ ')
@@ -150,7 +149,7 @@ class sentiment_classifier(object):
 		else:
 			print("Creating model with fresh parameters.")
 			self.sess.run(tf.global_variables_initializer())
-		x_train, y_train, x_test, y_test = self.build_dataset(data_file)
+		x_train, y_train, x_test, y_test = self.build_dataset(self.data_file)
 		print ("start training...")
 		for epoch in range(self.training_epochs):
 			print (' epoch %3d :' %(epoch+1))

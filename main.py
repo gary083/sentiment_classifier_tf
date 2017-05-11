@@ -20,6 +20,8 @@ def parse():
 	parser.add_argument('-unit_size' , default=128, help='unit_size...')
 	parser.add_argument('-batch_size' , default=1024, help='batch_size...')
 	parser.add_argument('-load_model' , default=False, help='load_model...')
+	parser.add_argument('-model_dir' , default='save', help='model_dir...')
+	parser.add_argument('-dict_file' , default='dictionary.txt', help='dict_file...')
 	args = parser.parse_args()
 	return args
 
