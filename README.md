@@ -1,9 +1,9 @@
 # sentiment_classifier
 ## How to run it :<br>
-  you can get training data and model here : https://goo.gl/dfGIHs<br>
+you can get training data and model here : https://goo.gl/dfGIHs<br>
   * train : `$ python3 main.py -train`<br>
   * test  : `$ python3 main.py -test`<br>
-  training data need to put in the directory `data/`, model save in the directory 'save/'<br>
+model save in the directory `save/` by default. <br>
       
 ## environment : <br>
 tensorflow-gpu (1.0.1)<br>
