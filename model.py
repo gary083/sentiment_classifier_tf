@@ -115,12 +115,12 @@ class sentiment_classifier(object):
 			word_count += 1
 		return data
 
-	def build_dataset(self, data_file):
+	def build_dataset(self):
 		if os.path.exists(self.data_file):
 			print ('building dataset...')
 			x_data = []
 			y_data = []
-			with open(data_file, 'r', errors='ignore') as file:
+			with open(self.data_file, 'r', errors='ignore') as file:
 				un_parse = file.readlines()
 				for line in un_parse:
 					line = line.strip('\n').split(' +++$+++ ')
@@ -132,7 +132,7 @@ class sentiment_classifier(object):
 			y_test  = np.array(y_data[int(len(y_data)*self.val_ratio):])
 			return x_train, y_train, x_test, y_test
 		else:
-			raise ValueError('Can not find dictionary file %s' %(file))
+			raise ValueError('Can not find dictionary file %s' %(self.data_file))
 
 	def get_batch(self, x, y):
 		i = 0
@@ -153,7 +153,7 @@ class sentiment_classifier(object):
 		else:
 			print("Creating model with fresh parameters.")
 			self.sess.run(tf.global_variables_initializer())
-		x_train, y_train, x_test, y_test = self.build_dataset(self.data_file)
+		x_train, y_train, x_test, y_test = self.build_dataset()
 		print ("start training...")
 		for epoch in range(self.training_epochs):
 			print (' epoch %3d :' %(epoch+1))
