@@ -173,18 +173,11 @@ class sentiment_classifier(object):
 		print ('loading previous model...')
 		self.saver.restore(self.sess, tf.train.latest_checkpoint(self.model_dir))
 		while True:
-			input_sentence = input(">> Input you sentence: ")
+			input_sentence = input(">> Input your sentence: ")
 			pat = re.compile('(\W+)')
 			input_sentence = re.split(pat, input_sentence.lower())
-			print (' '.join(input_sentence))
+			#print (' '.join(input_sentence))
 			data = self.tokenizer(' '.join(input_sentence))
-			print (data)
+			#print (data)
 			score = self.get_score(np.array([data]))
-			print (score)
-
-
-
-		
-
-
-
+			print ('score: ' , score[0][0])
